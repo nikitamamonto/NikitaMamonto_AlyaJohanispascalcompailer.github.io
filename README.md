@@ -1,1 +1,1 @@
-# NikitaMamonto_AlyaJohanispascalcompailer.github.io
+#compailerpascal.github.io
