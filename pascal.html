@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple GCL Pascal Compiler</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #4b79a1, #283e51);
+            padding: 40px; 
+            color: white;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        textarea { 
+            width: 100%; 
+            height: 160px; 
+            font-size: 15px; 
+            border-radius: 10px; 
+            padding: 12px;
+            border: none;
+            outline: none;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        textarea::placeholder {
+            color: #ddd;
+        }
+
+        .btn {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: #00e676;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #00c853;
+        }
+
+        #output {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        h2, h3 {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Token styling */
+        .token {
+            padding: 5px 7px; 
+            margin: 5px; 
+            display: inline-block; 
+            border-radius: 6px; 
+            font-size: 14px;
+        }
+
+        .KEYWORD { background: #ffb300; color: black; }
+        .IDENTIFIER { background: #29b6f6; color: black; }
+        .NUMBER { background: #ab47bc; color: white; }
+        .ASSIGN { background: #ef5350; color: white; }
+        .OPERATOR { background: #66bb6a; color: white; }
+        .SYMBOL { background: #ffa726; color: black; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>PASCAL<br>Style Lexical Scanner for GCL</h2>
+
+    <textarea id="code" placeholder="Tulis kode GCL di sini...
+
+Contoh:
+if x > 0 -> y := y + 1 fi"></textarea>
+
+    <button class="btn" onclick="compile()">Run</button>
+
+    <div id="output"></div>
+</div>
+
+<script>
+function compile() {
+    let code = document.getElementById("code").value;
+
+    const tokenPatterns = [
+        { type: "KEYWORD", regex: /\b(if|fi|do|od|->)\b/g },
+        { type: "IDENTIFIER", regex: /\b[a-zA-Z_][a-zA-Z0-9_]*\b/g },
+        { type: "NUMBER", regex: /\b\d+\b/g },
+        { type: "ASSIGN", regex: /:=/g },
+        { type: "OPERATOR", regex: /==|<=|>=|<|>|!=|\+|-|\*|\//g },
+        { type: "SYMBOL", regex: /[();]/g }
+    ];
+
+    let tokens = [];
+
+    tokenPatterns.forEach(pattern => {
+        let match;
+        while ((match = pattern.regex.exec(code)) !== null) {
+            tokens.push({ value: match[0], type: pattern.type, index: match.index });
+        }
+    });
+
+    tokens.sort((a, b) => a.index - b.index);
+
+    let html = "<h3>Output Token:</h3>";
+
+    tokens.forEach(t => {
+        html += `<span class="token ${t.type}">${t.value} → <b>${t.type}</b></span><br>`;
+    });
+
+    document.getElementById("output").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
